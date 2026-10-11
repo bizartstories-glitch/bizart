@@ -336,4 +336,131 @@
 </script>
 
 </body>
+  
+<div class="panel" id="whiteRemovalTools" style="margin-top:20px">
+  <h2>Ta bort vit bakgrund</h2>
+  <p class="note">
+    Gör vita och nästan vita pixlar genomskinliga.
+    Vita delar av motivet kan också påverkas.
+  </p>
+
+  <label for="whiteThreshold">Hur mycket vitt ska tas bort?</label>
+  <input
+    id="whiteThreshold"
+    type="range"
+    min="200"
+    max="255"
+    value="242"
+    style="width:100%;margin:15px 0"
+  >
+  <p class="note">
+    Lägre värde tar bort mer av de ljusa färgerna.
+  </p>
+
+  <button id="makeTransparent" class="button" type="button">
+    Ta bort vitt
+  </button>
+
+  <button id="downloadTransparent" class="button"
+    type="button" disabled>
+    Ladda ner transparent PNG
+  </button>
+
+  <canvas id="transparentCanvas" hidden></canvas>
+  <p id="whiteRemovalStatus" class="note" role="status"></p>
+</div>
+
+<script>
+(() => {
+  const input = document.getElementById("imageInput");
+  const removeButton = document.getElementById("makeTransparent");
+  const downloadButton = document.getElementById("downloadTransparent");
+  const thresholdInput = document.getElementById("whiteThreshold");
+  const canvas = document.getElementById("transparentCanvas");
+  const status = document.getElementById("whiteRemovalStatus");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  let sourceImage = null;
+
+  input.addEventListener("change", () => {
+    const file = input.files && input.files[0];
+    sourceImage = null;
+    downloadButton.disabled = true;
+
+    if (!file) return;
+
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      status.textContent = "Välj en JPG-, PNG- eller WebP-bild.";
+      return;
+    }
+
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      sourceImage = img;
+      URL.revokeObjectURL(url);
+      status.textContent = "Bilden är redo. Tryck på Ta bort vitt.";
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      status.textContent = "Bilden kunde inte öppnas.";
+    };
+
+    img.src = url;
+  });
+
+  removeButton.addEventListener("click", () => {
+    if (!sourceImage) {
+      status.textContent = "Välj en bild först.";
+      return;
+    }
+
+    canvas.width = sourceImage.naturalWidth;
+    canvas.height = sourceImage.naturalHeight;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(sourceImage, 0, 0);
+
+    const imageData = ctx.getImageData(
+      0, 0, canvas.width, canvas.height
+    );
+    const pixels = imageData.data;
+    const threshold = Number(thresholdInput.value);
+
+    for (let i = 0; i < pixels.length; i += 4) {
+      const r = pixels[i];
+      const g = pixels[i + 1];
+      const b = pixels[i + 2];
+
+      if (r >= threshold && g >= threshold && b >= threshold) {
+        pixels[i + 3] = 0;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    downloadButton.disabled = false;
+    status.textContent =
+      "Klart! Kontrollera att inga vita detaljer i motivet försvann.";
+  });
+
+  downloadButton.addEventListener("click", () => {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        status.textContent = "Det gick inte att skapa PNG-filen.";
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "bizart-transparent.png";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, "image/png");
+  });
+})();
+</script>
+
 </html>
