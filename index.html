@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f1e7">
+  <title>BIZART – Vi trycker din T-shirt</title>
+  <style>
+    :root {
+      --paper: #f6f1e7;
+      --ink: #25251f;
+      --red: #b74732;
+      --lime: #d5e76b;
+      --muted: #6d6b60;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      padding: 22px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #d9d1c3;
+    }
+
+    .logo {
+      color: var(--red);
+      font-size: clamp(30px, 7vw, 54px);
+      font-weight: 900;
+      letter-spacing: -3px;
+    }
+
+    .tag {
+      background: var(--lime);
+      padding: 9px 13px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: bold;
+      transform: rotate(-3deg);
+    }
+
+    main {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 55px 22px 70px;
+    }
+
+    .intro { max-width: 650px; }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--red);
+    }
+
+    h1 {
+      font-size: clamp(38px, 8vw, 72px);
+      line-height: .98;
+      letter-spacing: -3px;
+      margin: 18px 0;
+    }
+
+    .intro p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 17px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 38px;
+    }
+
+    .panel {
+      border: 1px solid #d9d1c3;
+      border-radius: 18px;
+      padding: 23px;
+      min-width: 0;
+    }
+
+    h2 { font-size: 20px; margin-top: 0; }
+
+    .upload {
+      display: block;
+      border: 2px dashed #bdb5a6;
+      border-radius: 13px;
+      padding: 28px 14px;
+      text-align: center;
+      cursor: pointer;
+      background: #fbf8f1;
+    }
+
+    .upload strong { display: block; margin-bottom: 8px; }
+
+    .upload span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .preview {
+      min-height: 260px;
+      margin-top: 18px;
+      border-radius: 12px;
+      background-color: #fff;
+      background-image:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 20px 20px;
+      background-position: 0 0,0 10px,10px -10px,-10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .preview img {
+      display: none;
+      max-width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+    }
+
+    .placeholder {
+      color: #858174;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--red);
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .steps {
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 18px 0;
+      line-height: 1.5;
+    }
+
+    .number {
+      background: var(--lime);
+      border-radius: 50%;
+      min-width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+    }
+
+    #status {
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    footer {
+      border-top: 1px solid #d9d1c3;
+      padding: 25px 6%;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .workspace { grid-template-columns: 1fr; }
+      main { padding-top: 35px; }
+      .tag { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">BIZART</div>
+    <div class="tag">DIN BILD. DIN T-SHIRT.</div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="eyebrow">Personligt tryck · Trycks live</div>
+      <h1>Din bild.<br>Din T-shirt.</h1>
+      <p>Välj en bild från din mobil och se den här.
+      När allt är klart kan du skicka din beställning till BizArt.</p>
+    </section>
+
+    <section class="workspace">
+      <div class="panel">
+        <h2>1. Välj din bild</h2>
+        <label class="upload" for="imageInput">
+          <strong>＋ Välj en bild</strong>
+          <span>JPG, PNG eller WebP · Max 15 MB</span>
+        </label>
+        <input id="imageInput" type="file"
+          accept="image/jpeg,image/png,image/webp">
+        <div class="preview">
+          <div class="placeholder" id="placeholder">
+            Din bild visas här
+          </div>
+          <img id="previewImage" alt="Förhandsvisning av din bild">
+        </div>
+        <p class="note">Förhandsvisningen visas i din webbläsare.
+        Bilden skickas inte automatiskt någonstans.</p>
+        <button class="button" id="sendButton" disabled>
+          Skicka till BizArt
+        </button>
+        <div id="status" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Så fungerar det</h2>
+        <ul class="steps">
+          <li><span class="number">1</span>
+            <span>Välj bilden du vill trycka på din T-shirt.</span></li>
+          <li><span class="number">2</span>
+            <span>Kontrollera bilden i förhandsvisningen.</span></li>
+          <li><span class="number">3</span>
+            <span>Skicka bilden när överföringen till BizArt är aktiverad.</span></li>
+        </ul>
+        <div style="background:#eae4d7;padding:17px;border-radius:12px;margin-top:25px">
+          <strong>Har du en egen idé?</strong>
+          <p class="note">Välj en bild som du har rätt att använda.
+          Vi hjälper dig med trycket på plats.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    BIZART · Personliga T-shirts med ditt eget motiv
+  </footer>
+
+  <script>
+    const input = document.getElementById("imageInput");
+    const image = document.getElementById("previewImage");
+    const placeholder = document.getElementById("placeholder");
+    const sendButton = document.getElementById("sendButton");
+    const status = document.getElementById("status");
+    let currentUrl = null;
+
+    input.addEventListener("change", () => {
+      const file = input.files && input.files[0];
+      sendButton.disabled = true;
+      status.textContent = "";
+
+      if (!file) return;
+
+      const allowed = ["image/jpeg", "image/png", "image/webp"];
+      if (!allowed.includes(file.type)) {
+        status.textContent = "Välj en JPG-, PNG- eller WebP-bild.";
+        input.value = "";
+        return;
+      }
+
+      if (file.size > 15 * 1024 * 1024) {
+        status.textContent = "Bilden är för stor. Maxstorleken är 15 MB.";
+        input.value = "";
+        return;
+      }
+
+      if (currentUrl) URL.revokeObjectURL(currentUrl);
+      currentUrl = URL.createObjectURL(file);
+      image.src = currentUrl;
+      image.style.display = "block";
+      placeholder.style.display = "none";
+      status.textContent =
+        "Bilden är vald. Skicka-funktionen aktiveras när överföringen är färdigkonfigurerad.";
+    });
+
+    sendButton.addEventListener("click", () => {
+      status.textContent =
+        "Överföring är inte aktiverad ännu. Din bild har inte skickats.";
+    });
+  </script>
+</body>
+</html>
