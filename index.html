@@ -319,5 +319,21 @@
         "Överföring är inte aktiverad ännu. Din bild har inte skickats.";
     });
   </script>
+  
+<div id="backgroundTools" style="margin-top:16px">
+  <button id="removeBgButton" class="button" type="button">
+    Ta bort bakgrunden
+  </button>
+  <p id="backgroundStatus" class="note" role="status">
+    Automatisk bakgrundsborttagning aktiveras i nästa steg.
+  </p>
+</div>
+<script>
+  document.getElementById("removeBgButton").addEventListener("click", () => {
+    document.getElementById("backgroundStatus").textContent =
+      "Bildmodellen är ännu inte ansluten. Din bild har inte ändrats.";
+  });
+</script>
+
 </body>
 </html>
