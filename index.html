@@ -295,8 +295,8 @@
         return;
       }
 
-      if (file.size > 15 * 1024 * 1024) {
-        status.textContent = "Bilden är för stor. Maxstorleken är 15 MB.";
+      if (file.size > 10 * 1024 * 1024) {
+        status.textContent = "Bilden är för stor. Maxstorleken är 10 MB.";
         input.value = "";
         return;
       }
