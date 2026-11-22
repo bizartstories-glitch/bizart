@@ -280,7 +280,6 @@
     const image = document.getElementById("previewImage");
     const placeholder = document.getElementById("placeholder");
     const status = document.getElementById("status");
-    const customerNameInput = document.getElementById("customerName");
     let currentUrl = null;
 
     input.addEventListener("change", () => {
@@ -338,6 +337,15 @@
   required
   style="width:100%;padding:13px;margin-top:8px;border:1px solid #bdb5a6;border-radius:8px;font-size:16px;"
 >
+  <label for="customerName"><strong>Ditt namn</strong></label>
+<input
+  id="customerName"
+  type="text"
+  placeholder="Skriv ditt namn här"
+  maxlength="50"
+  required
+  style="width:100%;padding:13px;margin-top:8px;border:1px solid #bdb5a6;border-radius:8px;font-size:16px;"
+>
   <button id="makeTransparent" class="button" type="button">
     Ta bort vitt
   </button>
@@ -356,6 +364,7 @@
   const input = document.getElementById("imageInput");
   const removeButton = document.getElementById("makeTransparent");
  const sendButton = document.getElementById("sendToBizArt");
+  const customerNameInput = document.getElementById("customerName");
   const canvas = document.getElementById("transparentCanvas");
   const status = document.getElementById("whiteRemovalStatus");
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -365,6 +374,14 @@
   input.addEventListener("change", () => {
     const file = input.files && input.files[0];
     sourceImage = null;
+    const customerName = customerNameInput.value.trim();
+
+if (!customerName) {
+  status.textContent = "Skriv ditt namn innan du skickar bilden.";
+  customerNameInput.focus();
+  sendButton.disabled = false;
+  return;
+}
     sendButton.disabled = true;
 
     if (!file) return;
