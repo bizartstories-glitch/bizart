@@ -471,16 +471,6 @@
       sendButton.disabled = false;
     }
   });
-      }
-
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "bizart-transparent.png";
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }, "image/png");
-  });
 })();
 </script>
 
