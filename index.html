@@ -413,7 +413,7 @@
     ctx.putImageData(imageData, 0, 0);
     sendButton.disabled = false;
     status.textContent =
-      "Klart! Kontrollera att inga vita detaljer i motivet försvann.";
+      "Klart! Allt vitt är borta.";
   });
 
   sendButton.addEventListener("click", async () => {
@@ -473,7 +473,7 @@
       );
 
       status.textContent =
-        "klart! bilden är skickad.";
+        "Klart! Bilden är skickad.";
 
     } catch (error) {
       status.textContent =
