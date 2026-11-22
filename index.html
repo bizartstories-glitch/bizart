@@ -328,15 +328,6 @@
     Vita delar av motivet kan också påverkas.
   </p>
 
-<label for="customerName"><strong>Ditt namn</strong></label>
-<input
-  id="customerName"
-  type="text"
-  placeholder="Skriv ditt namn här"
-  maxlength="50"
-  required
-  style="width:100%;padding:13px;margin-top:8px;border:1px solid #bdb5a6;border-radius:8px;font-size:16px;"
->
   <label for="customerName"><strong>Ditt namn</strong></label>
 <input
   id="customerName"
@@ -370,10 +361,6 @@
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
   let sourceImage = null;
-
-  input.addEventListener("change", () => {
-    const file = input.files && input.files[0];
-    sourceImage = null;
 input.addEventListener("change", () => {
   const file = input.files && input.files[0];
   sourceImage = null;
