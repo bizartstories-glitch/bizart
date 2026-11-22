@@ -333,10 +333,10 @@
     Ta bort vitt
   </button>
 
-  <button id="downloadTransparent" class="button"
+  <button id="sendToBizArt" class="button"
     type="button" disabled>
-    Ladda ner transparent PNG
-  </button>
+    Skicka till BizArt
+</button>
 
   <canvas id="transparentCanvas" hidden></canvas>
   <p id="whiteRemovalStatus" class="note" role="status"></p>
@@ -346,7 +346,7 @@
 (() => {
   const input = document.getElementById("imageInput");
   const removeButton = document.getElementById("makeTransparent");
-  const downloadButton = document.getElementById("downloadTransparent");
+ const sendButton = document.getElementById("sendToBizArt");
   const canvas = document.getElementById("transparentCanvas");
   const status = document.getElementById("whiteRemovalStatus");
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -356,7 +356,7 @@
   input.addEventListener("change", () => {
     const file = input.files && input.files[0];
     sourceImage = null;
-    downloadButton.disabled = true;
+    sendButton.disabled = true;
 
     if (!file) return;
 
@@ -411,16 +411,66 @@
     }
 
     ctx.putImageData(imageData, 0, 0);
-    downloadButton.disabled = false;
+    sendButton.disabled = false;
     status.textContent =
       "Klart! Kontrollera att inga vita detaljer i motivet försvann.";
   });
+  sendButton.addEventListener("click", async () => {
+    if (!canvas.width || !canvas.height) {
+      status.textContent = "Välj en bild och tryck på Ta bort vitt först.";
+      return;
+    }
 
-  downloadButton.addEventListener("click", () => {
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        status.textContent = "Det gick inte att skapa PNG-filen.";
-        return;
+    sendButton.disabled = true;
+    status.textContent = "Förbereder bilden...";
+
+    try {
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((result) => {
+          if (result) resolve(result);
+          else reject(new Error("Kunde inte skapa PNG-bilden."));
+        }, "image/png");
+      });
+
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () =>
+          resolve(String(reader.result).split(",")[1]);
+        reader.onerror = () =>
+          reject(new Error("Kunde inte läsa bilden."));
+        reader.readAsDataURL(blob);
+      });
+
+      if (base64.length > 14 * 1024 * 1024) {
+        throw new Error("Den bearbetade bilden är för stor.");
+      }
+
+      status.textContent = "Skickar bilden till BizArt...";
+
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbxRktUDswmnt6Z1hsgf3Sqmeli-zuFlB1ksnTPHbGli21Fkwhx_p9k9NZJLeYXExWES/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            image: base64,
+            mimeType: "image/png"
+          })
+        }
+      );
+
+      status.textContent =
+        "Uppladdningsförfrågan skickad. Kontrollera att bilden finns i BizArt Kundbilder i Google Drive.";
+
+    } catch (error) {
+      status.textContent =
+        "Det gick inte att skicka bilden: " + error.message;
+      sendButton.disabled = false;
+    }
+  });
       }
 
       const url = URL.createObjectURL(blob);
