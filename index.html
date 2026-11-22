@@ -248,9 +248,7 @@
         </div>
         <p class="note">Förhandsvisningen visas i din webbläsare.
         Bilden skickas inte automatiskt någonstans.</p>
-        <button class="button" id="sendButton" disabled>
-          Skicka till BizArt
-        </button>
+       
         <div id="status" role="status" aria-live="polite"></div>
       </div>
 
@@ -281,13 +279,11 @@
     const input = document.getElementById("imageInput");
     const image = document.getElementById("previewImage");
     const placeholder = document.getElementById("placeholder");
-    const sendButton = document.getElementById("sendButton");
     const status = document.getElementById("status");
     let currentUrl = null;
 
     input.addEventListener("change", () => {
       const file = input.files && input.files[0];
-      sendButton.disabled = true;
       status.textContent = "";
 
       if (!file) return;
@@ -314,10 +310,6 @@
         "Bilden är vald. Skicka-funktionen aktiveras när överföringen är färdigkonfigurerad.";
     });
 
-    sendButton.addEventListener("click", () => {
-      status.textContent =
-        "Överföring är inte aktiverad ännu. Din bild har inte skickats.";
-    });
   </script>
   
 
