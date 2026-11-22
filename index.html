@@ -354,19 +354,17 @@
 (() => {
   const input = document.getElementById("imageInput");
   const removeButton = document.getElementById("makeTransparent");
- const sendButton = document.getElementById("sendToBizArt");
+  const sendButton = document.getElementById("sendToBizArt");
   const customerNameInput = document.getElementById("customerName");
   const canvas = document.getElementById("transparentCanvas");
   const status = document.getElementById("whiteRemovalStatus");
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
   let sourceImage = null;
-input.addEventListener("change", () => {
-  const file = input.files && input.files[0];
-  sourceImage = null;
-  sendButton.disabled = true;
 
-  if (!file) return;
+  input.addEventListener("change", () => {
+    const file = input.files && input.files[0];
+    sourceImage = null;
     sendButton.disabled = true;
 
     if (!file) return;
@@ -412,11 +410,11 @@ input.addEventListener("change", () => {
     const threshold = 200;
 
     for (let i = 0; i < pixels.length; i += 4) {
-      const r = pixels[i];
-      const g = pixels[i + 1];
-      const b = pixels[i + 2];
+      const red = pixels[i];
+      const green = pixels[i + 1];
+      const blue = pixels[i + 2];
 
-      if (r >= threshold && g >= threshold && b >= threshold) {
+      if (red >= threshold && green >= threshold && blue >= threshold) {
         pixels[i + 3] = 0;
       }
     }
@@ -426,19 +424,21 @@ input.addEventListener("change", () => {
     status.textContent =
       "Klart! Kontrollera att inga vita detaljer i motivet försvann.";
   });
+
   sendButton.addEventListener("click", async () => {
     if (!canvas.width || !canvas.height) {
       status.textContent = "Välj en bild och tryck på Ta bort vitt först.";
       return;
     }
-const customerName = customerNameInput.value.trim();
 
-if (!customerName) {
-  status.textContent = "Skriv ditt namn innan du skickar bilden.";
-  customerNameInput.focus();
-  sendButton.disabled = false;
-  return;
-}
+    const customerName = customerNameInput.value.trim();
+
+    if (!customerName) {
+      status.textContent = "Skriv ditt namn innan du skickar bilden.";
+      customerNameInput.focus();
+      return;
+    }
+
     sendButton.disabled = true;
     status.textContent = "Förbereder bilden...";
 
@@ -473,17 +473,16 @@ if (!customerName) {
           headers: {
             "Content-Type": "text/plain;charset=utf-8"
           },
-body: JSON.stringify({
-  image: base64,
-  mimeType: "image/png",
-  customerName: customerName
-})
+          body: JSON.stringify({
+            image: base64,
+            mimeType: "image/png",
+            customerName: customerName
           })
         }
       );
 
       status.textContent =
-        "Uppladdningsförfrågan skickad. Kontrollera att bilden finns i BizArt Kundbilder i Google Drive.";
+        "Uppladdningsförfrågan skickad. Kontrollera Google Drive.";
 
     } catch (error) {
       status.textContent =
@@ -493,6 +492,7 @@ body: JSON.stringify({
   });
 })();
 </script>
+
 
 </body>
 </html>
