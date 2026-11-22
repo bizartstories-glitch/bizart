@@ -374,14 +374,12 @@
   input.addEventListener("change", () => {
     const file = input.files && input.files[0];
     sourceImage = null;
-    const customerName = customerNameInput.value.trim();
+input.addEventListener("change", () => {
+  const file = input.files && input.files[0];
+  sourceImage = null;
+  sendButton.disabled = true;
 
-if (!customerName) {
-  status.textContent = "Skriv ditt namn innan du skickar bilden.";
-  customerNameInput.focus();
-  sendButton.disabled = false;
-  return;
-}
+  if (!file) return;
     sendButton.disabled = true;
 
     if (!file) return;
