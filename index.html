@@ -280,6 +280,7 @@
     const image = document.getElementById("previewImage");
     const placeholder = document.getElementById("placeholder");
     const status = document.getElementById("status");
+    const customerNameInput = document.getElementById("customerName");
     let currentUrl = null;
 
     input.addEventListener("change", () => {
@@ -328,7 +329,15 @@
     Vita delar av motivet kan också påverkas.
   </p>
 
-
+<label for="customerName"><strong>Ditt namn</strong></label>
+<input
+  id="customerName"
+  type="text"
+  placeholder="Skriv ditt namn här"
+  maxlength="50"
+  required
+  style="width:100%;padding:13px;margin-top:8px;border:1px solid #bdb5a6;border-radius:8px;font-size:16px;"
+>
   <button id="makeTransparent" class="button" type="button">
     Ta bort vitt
   </button>
@@ -420,7 +429,14 @@
       status.textContent = "Välj en bild och tryck på Ta bort vitt först.";
       return;
     }
+const customerName = customerNameInput.value.trim();
 
+if (!customerName) {
+  status.textContent = "Skriv ditt namn innan du skickar bilden.";
+  customerNameInput.focus();
+  sendButton.disabled = false;
+  return;
+}
     sendButton.disabled = true;
     status.textContent = "Förbereder bilden...";
 
@@ -455,9 +471,11 @@
           headers: {
             "Content-Type": "text/plain;charset=utf-8"
           },
-          body: JSON.stringify({
-            image: base64,
-            mimeType: "image/png"
+body: JSON.stringify({
+  image: base64,
+  mimeType: "image/png",
+  customerName: customerName
+})
           })
         }
       );
