@@ -320,14 +320,7 @@
     });
   </script>
   
-<div id="backgroundTools" style="margin-top:16px">
-  <button id="removeBgButton" class="button" type="button">
-    Ta bort bakgrunden
-  </button>
-  <p id="backgroundStatus" class="note" role="status">
-    Automatisk bakgrundsborttagning aktiveras i nästa steg.
-  </p>
-</div>
+
 <script>
   document.getElementById("removeBgButton").addEventListener("click", () => {
     document.getElementById("backgroundStatus").textContent =
@@ -343,18 +336,6 @@
     Vita delar av motivet kan också påverkas.
   </p>
 
-  <label for="whiteThreshold">Hur mycket vitt ska tas bort?</label>
-  <input
-    id="whiteThreshold"
-    type="range"
-    min="200"
-    max="255"
-    value="242"
-    style="width:100%;margin:15px 0"
-  >
-  <p class="note">
-    Lägre värde tar bort mer av de ljusa färgerna.
-  </p>
 
   <button id="makeTransparent" class="button" type="button">
     Ta bort vitt
@@ -374,7 +355,6 @@
   const input = document.getElementById("imageInput");
   const removeButton = document.getElementById("makeTransparent");
   const downloadButton = document.getElementById("downloadTransparent");
-  const thresholdInput = document.getElementById("whiteThreshold");
   const canvas = document.getElementById("transparentCanvas");
   const status = document.getElementById("whiteRemovalStatus");
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -426,7 +406,7 @@
       0, 0, canvas.width, canvas.height
     );
     const pixels = imageData.data;
-    const threshold = Number(thresholdInput.value);
+    const threshold = 200;
 
     for (let i = 0; i < pixels.length; i += 4) {
       const r = pixels[i];
